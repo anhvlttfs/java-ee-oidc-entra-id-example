@@ -1,0 +1,18 @@
+name: entra-id-example
+
+services:
+    web-instance:
+        container_name: tomcatweb
+        volumes:
+            - weblogs:/usr/local/tomcat/logs
+        networks:
+            - backend
+        env_file:
+            - ./.env
+        ports:
+            - 127.0.0.1:8080:8080
+        depends_on:
+            db-instance:
+                condition: service_healthy
+        restart: always
+        image: anhvlttfs/entra-id-example:latest
