@@ -178,7 +178,7 @@ public class Auth extends HttpServlet {
             return;
         }
 
-        String redirectUri = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath()) + "/auth?action=oidc_callback";
+        String redirectUri = this.RootUrl + "/auth?action=oidc_callback";
 
         // Exchange code for tokens
         URL tokenUrl = new URI(this.OidcTokenEndpoint).toURL();
