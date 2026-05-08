@@ -21,12 +21,11 @@ import com.nimbusds.jose.jwk.source.JWKSourceBuilder;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jose.util.DefaultResourceRetriever;
+import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
-
-import com.nimbusds.jose.util.DefaultResourceRetriever;
-import com.nimbusds.jose.util.ResourceRetriever;
 
 import Models.Objects.User;
 import jakarta.json.Json;
@@ -44,6 +43,9 @@ public class Auth extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    // Root device
+    private final String RootUrl;
+
     // Consistent OIDC attributes
     private final String OidcWellknown;
     private final String OidcClientId;
@@ -59,11 +61,13 @@ public class Auth extends HttpServlet {
     private boolean isOidcEnabled;
 
     public Auth() {
+        this.RootUrl = (System.getenv("ROOT_ENV") != null) ? System.getenv("ROOT_ENV") : "http://localhost:8080";
+        
         this.OidcWellknown = System.getenv("OIDC_WELL_KNOWN");
         this.OidcClientId = System.getenv("OIDC_CLIENT_ID");
         this.OidcClientSecret = System.getenv("OIDC_CLIENT_SECRET");
         this.OidcScope = System.getenv("OIDC_SCOPE");
-
+        
         String OidcIssuerProvided = System.getenv("OIDC_ISSUER");
 
         if (this.OidcClientId != null && this.OidcClientSecret != null && this.OidcWellknown != null && this.OidcScope != null && this.LoadOidcConfiguration()) {
@@ -133,7 +137,7 @@ public class Auth extends HttpServlet {
 
         session.setAttribute("oidc_state", state);
 
-        String redirectUri = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath()) + "/auth?action=oidc_callback";
+        String redirectUri = this.RootUrl + "/auth?action=oidc_callback";
 
         String authUrl = String.format(
                 "%s?"
