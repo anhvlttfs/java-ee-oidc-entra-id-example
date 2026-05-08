@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
     <head>
-        <title>The Tech News - Home Page</title>
+        <title>Entra External ID Example</title>
         <%@include file="/WEB-INF/JSPViews/global/htmlHead.jsp" %>
     </head>
     <body>
