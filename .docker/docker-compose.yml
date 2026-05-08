@@ -3,8 +3,6 @@ name: entra-id-example
 services:
     web-instance:
         container_name: tomcatweb
-        volumes:
-            - weblogs:/usr/local/tomcat/logs
         env_file:
             - ./.env
         ports:
